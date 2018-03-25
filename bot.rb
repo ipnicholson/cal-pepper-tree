@@ -20,6 +20,12 @@ end
 
 reply_message = "Native plants are great! But, did you know the 'California' Pepper Tree is actually an invasive weed from Peru? More on this mixup: https://en.wikipedia.org/wiki/Schinus_molle"
 
+replied_to = []
+
+CSV.foreach("replied-to.csv") do |row|
+  replied_to << row.first.to_i
+end
+
 search_options = {
   # result_type: "recent"
 }
@@ -27,15 +33,17 @@ search_options = {
 # Reply to tweets matching search criteria
 client.search("california pepper tree", search_options).each do |tweet|
   # Don't reply to self, don't reply if self has already replied
-  if tweet.user.id != bot_account_id && tweet.
+  if (tweet.user.id != bot_account_id && !replied_to.include?(tweet.id))
     puts "\nMatching result: \n#{tweet.created_at} \n#{tweet.user.screen_name}: #{tweet.text}"
 
     client.update("@#{tweet.user.screen_name} #{reply_message}", in_reply_to_status_id: tweet.id)
 
+    CSV.open("replied-to.csv", "a") do |csv|
+      csv << [tweet.id]
+    end
   end
 end
 
-# Don't reply to tweets that have already been replied to
 
 # search for tweets matching "california pepper tree" on time interval
 # reply with stock message

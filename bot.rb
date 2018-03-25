@@ -1,8 +1,13 @@
 #!/usr/bin/env ruby
-# ^ above is not a comment, but a "hashbang" DO NOT DELETE
 
 require 'yaml'
+require 'csv'
 require 'twitter'
+require 'pp'
+
+puts "running"
+
+bot_account_id = 935720336686854144 # @calpeppertree account
 
 account = YAML.load_file('secrets.yml')
 
@@ -19,20 +24,18 @@ search_options = {
   # result_type: "recent"
 }
 
-replied_to = Hash.new
+# Reply to tweets matching search criteria
+client.search("california pepper tree", search_options).each do |tweet|
+  # Don't reply to self, don't reply if self has already replied
+  if tweet.user.id != bot_account_id && tweet.
+    puts "\nMatching result: \n#{tweet.created_at} \n#{tweet.user.screen_name}: #{tweet.text}"
 
-client.search("#calpeppertreetest", search_options).each do |tweet|
-  if tweet.user.screen_name != 'calpeppertree' # Don't reply to self
-    puts "Matching result: #{tweet.user.screen_name}: #{tweet.text}"
-    puts "User:#{tweet.user} Screen name:#{tweet.user.screen_name}"
-    # client.update("@#{tweet.user.screen_name} #{reply_message}", in_reply_to_status_id: tweet.id)
-    # puts tweet.id
-    
-    # replied_to[tweet.id] = 0
+    client.update("@#{tweet.user.screen_name} #{reply_message}", in_reply_to_status_id: tweet.id)
+
   end
 end
 
-puts replied_to
+# Don't reply to tweets that have already been replied to
 
 # search for tweets matching "california pepper tree" on time interval
 # reply with stock message

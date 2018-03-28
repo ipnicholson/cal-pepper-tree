@@ -9,7 +9,7 @@ puts "\nrunning"
 
 puts "\n"
 
-account = YAML.load_file('secrets.yml')
+account = YAML.load_file('./secrets.yml')
 
 client = Twitter::REST::Client.new do |config|
   config.consumer_key        = account['consumer_key']

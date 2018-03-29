@@ -5,10 +5,7 @@ require 'csv'
 require 'twitter'
 require 'pp'
 
-puts "running"
-
-# Connected Twitter account
-bot_account_id = 935720336686854144 # @calpeppertree
+puts "Running!"
 
 # Load credentials
 account = YAML.load_file('secrets.yml')
@@ -20,8 +17,14 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = account['access_token_secret']
 end
 
+bot_account_id = client.user.id
+
+puts "\nBot Account: @#{client.user.screen_name}"
+
 # Search terms for tweets to reply to
 search_terms = "california pepper tree"
+
+puts "\nSearch Terms: \"#{search_terms}\""
 
 search_options = {
   # result_type: "recent"

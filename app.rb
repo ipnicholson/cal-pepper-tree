@@ -32,6 +32,7 @@ reply_message = "Native plants are great! But, did you know the 'California' Pep
 
 # Keep list of previously replied-to tweets
 replied_to = []
+
 CSV.foreach("replied-to.csv") do |row|
   replied_to << row.first.to_i
 end
@@ -40,12 +41,21 @@ end
 client.search(search_terms, search_options).each do |tweet|
   # Don't reply to self, don't reply if self has already replied
   if (tweet.user.id != bot_account_id && !replied_to.include?(tweet.id))
-    puts "\nMatching result: \n#{tweet.created_at} \n#{tweet.user.screen_name}: #{tweet.text}"
+    begin
+      puts "\nMatching result: \n#{tweet.created_at} \n#{tweet.user.screen_name}: #{tweet.text}"
+      client.update("@#{tweet.user.screen_name} #{reply_message}", in_reply_to_status_id: tweet.id)
 
-    client.update("@#{tweet.user.screen_name} #{reply_message}", in_reply_to_status_id: tweet.id)
+    # Error handling
+    rescue Exception => error
+      puts "\nError:"
+      pp error.message
 
-    CSV.open("replied-to.csv", "a") do |csv|
-      csv << [tweet.id]
+    # Log to CSV if no errors
+    else
+      CSV.open("replied-to.csv", "a") do |csv|
+        csv << [tweet.id]
+      end
     end
   end
+
 end

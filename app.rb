@@ -15,16 +15,12 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = account['access_token_secret']
 end
 
-puts "\nBot Account: @#{client.user.screen_name}"
+# --------------------------------------------------------------
+
+# CONFIGURATION
 
 # Search terms for tweets to reply to
 search_terms = "california pepper tree"
-
-puts "\nSearch Terms: \"#{search_terms}\""
-
-puts "\nRun? (Y/n)"
-answer = gets.chomp
-puts answer
 
 # Search options. See Twitter API docs
 search_options = {
@@ -33,6 +29,17 @@ search_options = {
 
 # Message to reply with
 reply_message = "Native plants are great! But, did you know the 'California' Pepper Tree is actually an invasive weed from Peru? More on this mixup: https://en.wikipedia.org/wiki/Schinus_molle"
+
+# --------------------------------------------------------------
+
+puts "\nBot Account: @#{client.user.screen_name}"
+puts "\nSearch Terms: \"#{search_terms}\""
+puts "\nSearch Options: #{search_options}"
+puts "\nReply Message: #{reply_message}"
+
+puts "\nRun? (Y/n)"
+answer = gets.chomp
+puts answer
 
 def tweet_reply(client, search_terms, search_options, reply_message)
 

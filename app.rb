@@ -38,8 +38,9 @@ puts "\nSearch Options: #{search_options}"
 puts "\nReply Message: #{reply_message}"
 
 puts "\nRun? (Y/n)"
-answer = gets.chomp
-puts answer
+answer = gets.chomp.downcase
+
+# --------------------------------------------------------------
 
 def tweet_reply(client, search_terms, search_options, reply_message)
 
@@ -78,4 +79,8 @@ def tweet_reply(client, search_terms, search_options, reply_message)
   end
 end
 
-tweet_reply(client, search_terms, search_options, reply_message)
+if answer == "y"
+  tweet_reply(client, search_terms, search_options, reply_message)
+else
+  puts "Exiting"
+end

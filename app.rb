@@ -26,6 +26,7 @@ search_terms = "california pepper tree"
 
 puts "\nSearch Terms: \"#{search_terms}\""
 
+# Search options. See Twitter API docs
 search_options = {
   # result_type: "recent"
 }
@@ -33,7 +34,7 @@ search_options = {
 # Message to reply with
 reply_message = "Native plants are great! But, did you know the 'California' Pepper Tree is actually an invasive weed from Peru? More on this mixup: https://en.wikipedia.org/wiki/Schinus_molle"
 
-# Keep list of previously replied-to tweets
+# Array of previously replied-to tweets
 replied_to = []
 
 CSV.foreach("replied-to.csv") do |row|
@@ -42,7 +43,7 @@ end
 
 # Reply to tweets matching search criteria
 client.search(search_terms, search_options).each do |tweet|
-  # Don't reply to self, don't reply if self has already replied
+  # Don't reply to self, and don't reply if self has already replied to that tweet
   if (tweet.user.id != bot_account_id && !replied_to.include?(tweet.id))
     begin
       puts "\nMatching result: \n#{tweet.created_at} \n#{tweet.user.screen_name}: #{tweet.text}"
@@ -56,7 +57,7 @@ client.search(search_terms, search_options).each do |tweet|
     # Log to CSV if no errors
     else
       CSV.open("replied-to.csv", "a") do |csv|
-        csv << [tweet.id]
+        csv << [tweet.id, tweet.user.screen_name]
       end
     end
   end

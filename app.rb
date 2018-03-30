@@ -32,10 +32,11 @@ reply_message = "Native plants are great! But, did you know the 'California' Pep
 
 # --------------------------------------------------------------
 
-puts "\nBot Account: @#{client.user.screen_name}"
-puts "\nSearch Terms: \"#{search_terms}\""
-puts "\nSearch Options: #{search_options}"
-puts "\nReply Message: #{reply_message}"
+puts "\nCONFIGURATION:"
+puts "\nBOT ACCOUNT: @#{client.user.screen_name}"
+puts "SEARCH TERMS: \"#{search_terms}\""
+puts "SEARCH OPTIONS: #{search_options}"
+puts "REPLY MESSAGE: #{reply_message}"
 
 puts "\nRun? (Y/n)"
 answer = gets.chomp.downcase
